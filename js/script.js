@@ -116,6 +116,32 @@ const uncheckItems = function () {
 
 
 
+const deleteCheckItemsEl = document.getElementById('delete-check-items')
+// console.log(deleteCheckItemsEl);
+
+const deleteCheckItems = function () {
+    // console.log("deleted");
+    // console.log(items);
+    for (let i = items.length - 1; i >= 0; i--) {
+        const item = items[i];
+        if(item.done === true) {
+            const index = items.indexOf(item)
+            items.splice(index,1)
+        }
+    }
+    // console.log(items);
+    localStorage.setItem("items",JSON.stringify(items));
+    showItemsInHtml(items)
+}
+
+
+
+
+
+
+
+
+
 
 formElement.addEventListener('submit', getForm)
 
@@ -134,6 +160,8 @@ ckeckAllElement.addEventListener('click',checkAll)
 
 
 uncheckAllItems.addEventListener('click',uncheckItems)
+
+deleteCheckItemsEl.addEventListener('click',deleteCheckItems)
 
 
 
