@@ -163,3 +163,66 @@ This JavaScript file implements the functionality for the Local Tapas applicatio
 6. Event listeners are set up for various user interactions.
 
 The code demonstrates the use of localStorage to persist data and event delegation for efficient event handling. It also shows how to dynamically update the DOM based on user interactions and data changes.
+## 5. New Feature: Delete Checked Items
+
+A new feature has been added to the Local Tapas application: the ability to delete all checked items at once. This functionality is implemented in the `deleteCheckItems` function:
+
+```javascript
+const deleteCheckItemsEl = document.getElementById('delete-check-items');
+
+const deleteCheckItems = function () {
+    for (let i = items.length - 1; i >= 0; i--) {
+        const item = items[i];
+        if(item.done === true) {
+            const index = items.indexOf(item);
+            items.splice(index, 1);
+        }
+    }
+    localStorage.setItem("items", JSON.stringify(items));
+    showItemsInHtml(items);
+};
+
+deleteCheckItemsEl.addEventListener('click', deleteCheckItems);
+```
+
+### How it works:
+
+1. **Backward Iteration**: 
+   - The function iterates through the `items` array from the end to the beginning (`for (let i = items.length - 1; i >= 0; i--)`).
+   - This approach is used to avoid issues that can occur when modifying an array while iterating forward through it.
+
+2. **Checking and Removing Items**:
+   - For each item, it checks if the item is marked as done (`if(item.done === true)`).
+   - If the item is done, it finds the index of the item and removes it from the array using `splice`.
+
+3. **Updating Storage and UI**:
+   - After removing all checked items, the function updates the localStorage with the modified array.
+   - It then calls `showItemsInHtml(items)` to update the UI, reflecting the changes made to the `items` array.
+
+### Important Note:
+
+While this function works, there's a potential optimization that could be made. The line `const index = items.indexOf(item)` is unnecessary because we already know the index (`i`) from the loop. The function could be simplified to:
+
+```javascript
+const deleteCheckItems = function () {
+    for (let i = items.length - 1; i >= 0; i--) {
+        if(items[i].done === true) {
+            items.splice(i, 1);
+        }
+    }
+    localStorage.setItem("items", JSON.stringify(items));
+    showItemsInHtml(items);
+};
+```
+
+This optimized version directly uses the loop index `i` to splice the array, avoiding the extra step of finding the index of each item.
+
+### Event Listener:
+
+An event listener is added to the "Delete Checked Items" button to trigger this function when clicked:
+
+```javascript
+deleteCheckItemsEl.addEventListener('click', deleteCheckItems);
+```
+
+This new feature enhances the functionality of the Local Tapas application by allowing users to easily remove multiple completed items at once, improving the overall user experience and management of the tapas list.
